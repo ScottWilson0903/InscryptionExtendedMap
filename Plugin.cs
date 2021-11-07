@@ -18,7 +18,7 @@ namespace CardLoaderMod
     {
         private const string PluginGuid = "cyantist.inscryption.extendedmap";
         private const string PluginName = "Extended Map";
-        private const string PluginVersion = "1.0.0.0";
+        private const string PluginVersion = "1.1.0.0";
 
         internal static ConfigEntry<int> configLength;
 
