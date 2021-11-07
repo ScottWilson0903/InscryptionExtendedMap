@@ -18,13 +18,15 @@ namespace CardLoaderMod
     {
         private const string PluginGuid = "cyantist.inscryption.extendedmap";
         private const string PluginName = "Extended Map";
-        private const string PluginVersion = "1.1.0.0";
+        private const string PluginVersion = "1.2.0.0";
 
         internal static ConfigEntry<int> configLength;
+        internal static ManualLogSource Log;
 
         private void Awake()
         {
             Logger.LogInfo($"Loaded {PluginName}!");
+            Plugin.Log = base.Logger;
 
             configLength = Config.Bind("General",
                                          "MapTriplets",
@@ -38,13 +40,15 @@ namespace CardLoaderMod
     [HarmonyPatch(typeof(PaperGameMap), "TryInitializeMapData")]
     public class PaperGameMap_TryInitializeMapData
     {
+        [HarmonyAfter(new string[] { "porta.inscryption.traderstart" })]
         public static bool Prefix(PaperGameMap __instance)
         {
             if (RunState.Run.map == null)
             {
                 var trav = Traverse.Create(__instance);
-                RunState.Run.map = MapGenerator.GenerateMap(RunState.CurrentMapRegion, 3, Plugin.configLength.Value*3+1,  trav.Field("PredefinedNodes").GetValue<PredefinedNodes>(),  trav.Field("PredefinedScenery").GetValue<PredefinedScenery>());
+                RunState.Run.map = MapGenerator.GenerateMap(RunState.CurrentMapRegion, 3, Plugin.configLength.Value*3+1,  trav.Property("PredefinedNodes").GetValue<PredefinedNodes>(),  trav.Property("PredefinedScenery").GetValue<PredefinedScenery>());
                 RunState.Run.currentNodeId = RunState.Run.map.RootNode.id;
+                Plugin.Log.LogInfo($"Set map length to {Plugin.configLength.Value*3+1} nodes");
             }
             return false;
         }

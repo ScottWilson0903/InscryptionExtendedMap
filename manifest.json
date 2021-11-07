@@ -1,6 +1,6 @@
 {
     "name": "ExtendedMaps",
-    "version_number": "1.1.0",
+    "version_number": "1.2.0",
     "website_url": "https://github.com/ScottWilson0903/InscryptionExtendedMap",
     "description": "Adds a config file to BepInEx to customise the length of the part1 maps.",
     "dependencies": [
